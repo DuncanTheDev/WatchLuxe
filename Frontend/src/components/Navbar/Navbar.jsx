@@ -1,10 +1,11 @@
 import "../Navbar/Navbar.css";
 import assets from "../../assets/assets";
 import { useState } from "react";
+import { NavLink } from "react-router-dom";
 
 export default function Navbar() {
-  const [menu, setMenu] = useState("home");
   const [openMenu, setOpenMenu] = useState(false);
+  const [accountOpen, setAccountOpen] = useState(false); // dropdown toggle
 
   return (
     <div className="navbar">
@@ -15,29 +16,49 @@ export default function Navbar() {
         <div className="close-btn" onClick={() => setOpenMenu(false)}>
           &times;
         </div>
-        <li
-          onClick={() => setMenu("home")}
-          className={menu === "home" ? "active" : ""}
-        >
-          Home
+        <li>
+          <NavLink
+            to="/"
+            className={({ isActive }) =>
+              isActive ? "menu-link active" : "menu-link"
+            }
+            onClick={() => setOpenMenu(false)}
+          >
+            Home
+          </NavLink>
         </li>
-        <li
-          onClick={() => setMenu("watches")}
-          className={menu === "watches" ? "active" : ""}
-        >
-          Watches
+        <li>
+          <NavLink
+            to="/watches"
+            className={({ isActive }) =>
+              isActive ? "menu-link active" : "menu-link"
+            }
+            onClick={() => setOpenMenu(false)}
+          >
+            Watches
+          </NavLink>
         </li>
-        <li
-          onClick={() => setMenu("about")}
-          className={menu === "about" ? "active" : ""}
-        >
-          About
+        <li>
+          <NavLink
+            to="/about"
+            className={({ isActive }) =>
+              isActive ? "menu-link active" : "menu-link"
+            }
+            onClick={() => setOpenMenu(false)}
+          >
+            About
+          </NavLink>
         </li>
-        <li
-          onClick={() => setMenu("contact")}
-          className={menu === "contact" ? "active" : ""}
-        >
-          Contact
+        <li>
+          <NavLink
+            to="/contact"
+            className={({ isActive }) =>
+              isActive ? "menu-link active" : "menu-link"
+            }
+            onClick={() => setOpenMenu(false)}
+          >
+            Contact
+          </NavLink>
         </li>
       </ul>
 
@@ -48,7 +69,22 @@ export default function Navbar() {
           <img className="icon" src={assets.cart} alt="cart_icon" />
           <div className="dot"></div>
         </div>
-        <img className="icon" src={assets.account} alt="account_icon" />
+
+        {/* Account Icon with Dropdown */}
+        <div className="account-wrapper">
+          <img
+            className="icon"
+            src={assets.account}
+            alt="account_icon"
+            onClick={() => setAccountOpen(!accountOpen)}
+          />
+          {accountOpen && (
+            <div className="account-dropdown">
+              <a href="/signin">Sign In</a>
+              <a href="/signup">Sign Up</a>
+            </div>
+          )}
+        </div>
 
         {/* Hamburger Icon */}
         <div className="menu-icon" onClick={() => setOpenMenu(true)}>
