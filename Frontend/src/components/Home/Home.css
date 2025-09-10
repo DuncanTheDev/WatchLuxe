@@ -1,0 +1,207 @@
+.hero-video {
+  background: black;
+  height: 640px;
+  width: 100%;
+  margin: auto;
+  position: relative;
+  height: 100vh;
+}
+
+.hero-video video {
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.banner-message {
+  position: absolute;
+  top: 55%;
+  left: 50%;
+  transform: translateX(-90%);
+  color: white;
+}
+
+.banner-message h1 {
+  font-size: 3rem;
+  margin-bottom: 10px;
+}
+
+.banner-message p {
+  font-size: 1.2rem;
+  max-width: 700px;
+}
+
+.card-container h1,
+.recommend h1 {
+  padding: 40px 0px 20px 40px;
+}
+
+.cards {
+  display: flex;
+  gap: 20px; /* space between cards */
+  overflow-x: auto; /* horizontal scroll */
+  scroll-snap-type: x mandatory; /* snapping effect */
+  padding: 20px;
+}
+
+.card {
+  flex: 0 0 calc(25% - 20px);
+  scroll-snap-align: center;
+  width: 330px;
+  height: 180px;
+  border-radius: 12px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border: 1px solid rgb(218, 218, 218);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cards::-webkit-scrollbar {
+  display: none; /* hide scrollbar for cleaner look */
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+.brand-logo {
+  width: 200px;
+}
+
+.recommend-cards {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding: 20px;
+}
+
+.recommend-card {
+  flex: 0 0 calc(25% - 80px);
+  scroll-snap-align: center;
+  width: 280px;
+  height: auto;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid rgb(218, 218, 218);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.recommend-cards::-webkit-scrollbar {
+  display: none; /* hide scrollbar for cleaner look */
+}
+
+.recommend-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+.recommend-card img {
+  width: 100%;
+  height: 250px;
+}
+
+/* iPad / Tablet View */
+@media (max-width: 1024px) {
+  .banner-message {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* center horizontally */
+    text-align: left;
+    width: 80%;
+    padding: 0 20px;
+  }
+
+  .banner-message h1 {
+    font-size: 2.2rem;
+  }
+
+  .banner-message p {
+    font-size: 1rem;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .card {
+    flex: 0 0 40%; /* 2 cards per row on tablet */
+    width: auto;
+    height: 160px;
+  }
+
+  .brand-logo {
+    width: 150px;
+  }
+
+  .recommend-card {
+    flex: 0 0 40%;
+    width: auto;
+  }
+
+  .recommend-card img {
+    height: 200px;
+  }
+}
+
+/* Mobile / Phone View */
+@media (max-width: 600px) {
+  .hero-video {
+    height: 70vh;
+  }
+
+  .banner-message {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* full center */
+    text-align: left;
+    width: 90%;
+    padding: 0 15px;
+  }
+
+  .banner-message h1 {
+    font-size: 1.8rem;
+    line-height: 2.2rem;
+  }
+
+  .banner-message p {
+    font-size: 1rem;
+    line-height: 1.5rem;
+    max-width: 95%;
+    margin: 0 auto;
+  }
+
+  .cards {
+    gap: 15px;
+    padding: 10px;
+  }
+
+  .card {
+    flex: 0 0 50%; /* one card at a time on phone */
+    width: auto;
+    height: 140px;
+  }
+
+  .brand-logo {
+    width: 120px;
+  }
+
+  .recommend-cards {
+    gap: 15px;
+    padding: 10px;
+  }
+
+  .recommend-card {
+    flex: 0 0 60%; /* one product per scroll */
+    width: auto;
+  }
+
+  .recommend-card img {
+    height: 180px;
+  }
+}

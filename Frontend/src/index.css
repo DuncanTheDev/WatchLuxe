@@ -7,11 +7,10 @@
   font-family: "Poppins", sans-serif;
 }
 
-body{
+body {
   min-height: 100vh;
 }
 
-.app{
-  width: 90%;
+.app {
   margin: auto;
 }

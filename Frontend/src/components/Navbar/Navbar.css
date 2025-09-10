@@ -1,8 +1,15 @@
 .navbar {
-  padding: 20px 0px;
+  padding: 20px 40px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  position: fixed; /* make it stick */
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: white; /* add background so content doesn't overlap */
+  z-index: 1000; /* keep it above other elements */
 }
 
 .logo {
@@ -71,7 +78,7 @@
     flex-direction: column;
     background: white;
     height: 100%;
-    width: 80%;
+    width: 70%;
     padding: 20px;
     box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
     transition: right 0.3s ease-in-out;
