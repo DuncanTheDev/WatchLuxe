@@ -151,6 +151,10 @@
 
 /* Mobile / Phone View */
 @media (max-width: 600px) {
+  h1 {
+    font-size: 22px;
+  }
+
   .hero-video {
     height: 70vh;
   }

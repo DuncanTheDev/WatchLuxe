@@ -1,0 +1,69 @@
+.watches-container {
+  height: auto;
+  width: 100%;
+  margin: auto;
+  display: flex;
+  padding: 20px;
+  gap: 20px;
+}
+
+.filter-container {
+  margin-top: 100px;
+  width: 20%;
+  height: 500px;
+  background: white;
+  padding: 0px 40px;
+  position: fixed;
+}
+
+.filter-header {
+  margin-top: 10px;
+  padding-bottom: 5px;
+}
+
+.product-container {
+  margin-top: 100px;
+  width: 80%;
+  height: auto;
+  background-color: white;
+}
+
+.brand-filter,
+.gender-filter {
+  padding-bottom: 12px;
+  border-bottom: 2px solid rgb(218, 218, 218);
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 3px;
+  font-size: 16px;
+}
+
+.product-container {
+  padding: 10px;
+  margin-left: 20%;
+}
+
+.products {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 equal columns */
+  gap: 20px; /* space between columns and rows */
+}
+
+.product-card {
+  height: 370px;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid rgb(218, 218, 218);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background: #fff;
+
+}
+
+.product-card img {
+  width: 100%;
+  height: 250px;
+}
