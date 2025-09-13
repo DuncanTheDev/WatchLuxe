@@ -7,6 +7,10 @@
   font-family: "Poppins", sans-serif;
 }
 
+html {
+  overflow-y:scroll; /* for modern browsers, scrollbar overlaps instead of shifting */
+}
+
 body {
   min-height: 100vh;
 }

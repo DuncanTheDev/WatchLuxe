@@ -14,14 +14,16 @@ class ProductController extends Controller
 
         //filter by brand
         if ($request->has('brand')) {
-            $query->whereHas('brand', function ($q) use ($request) {
-                $q->where('name', $request->brand);
+            $brands = is_array($request->brand) ? $request->brand : [$request->brand];
+            $query->whereHas('brand', function ($q) use ($brands) {
+                $q->whereIn('name', $brands);
             });
         }
 
         //filter by gender
         if ($request->has('gender')) {
-            $query->where('gender', $request->gender);
+            $genders = is_array($request->gender) ? $request->gender : [$request->gender];
+            $query->whereIn('gender', $genders);
         }
 
         //sorting

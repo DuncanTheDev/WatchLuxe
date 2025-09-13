@@ -1,69 +1,136 @@
 .watches-container {
-  height: auto;
-  width: 100%;
-  margin: auto;
   display: flex;
-  padding: 20px;
   gap: 20px;
+  padding: 20px;
+  background: #f9f9f9;
+  min-height: calc(100vh - 60px);
 }
 
+/* ---------- Filters ---------- */
 .filter-container {
+  position: sticky;   /* stays in view while scrolling */
+  top: 100px;         /* adjust to match your navbar height */
+  align-self: flex-start;
   margin-top: 100px;
   width: 20%;
-  height: 500px;
-  background: white;
-  padding: 0px 40px;
-  position: fixed;
+  min-height: 200px;
+  background: #fff;
+  padding: 20px;
+  border: 1px solid #eee;
+  border-radius: 8px;
 }
 
 .filter-header {
-  margin-top: 10px;
-  padding-bottom: 5px;
-}
-
-.product-container {
-  margin-top: 100px;
-  width: 80%;
-  height: auto;
-  background-color: white;
-}
-
-.brand-filter,
-.gender-filter {
-  padding-bottom: 12px;
-  border-bottom: 2px solid rgb(218, 218, 218);
+  font-weight: 600;
+  margin: 15px 0 10px;
+  font-size: 16px;
 }
 
 .filter-group {
   display: flex;
   align-items: center;
-  gap: 5px;
-  margin-top: 3px;
-  font-size: 16px;
+  gap: 6px;
+  margin: 5px 0;
+  font-size: 14px;
 }
 
+/* ---------- Products ---------- */
 .product-container {
-  padding: 10px;
-  margin-left: 20%;
+  flex: 1;
+  margin-top: 100px;
 }
 
 .products {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 4 equal columns */
-  gap: 20px; /* space between columns and rows */
+  grid-template-columns: repeat(auto-fill, minmax(250px, 250px)); /* fixed card width */
+  justify-content: space-evenly; /* align left */
+  gap: 25px;
 }
 
 .product-card {
-  height: 370px;
-  padding: 20px;
-  border-radius: 12px;
-  border: 1px solid rgb(218, 218, 218);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: 270px;  /* fixed size */
+  height: auto;
   background: #fff;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  padding: 15px;
+  text-align: center;
+  transition: transform 0.2s ease-in-out;
+  cursor: pointer;
+}
 
+.product-card:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
 }
 
 .product-card img {
-  width: 100%;
-  height: 250px;
+  width: auto;
+  height: 240px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.brand {
+  font-size: 14px;
+  color: #555;
+  text-align: left;
+}
+
+.ref-num {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 5px 0;
+  text-align: left;
+}
+
+.price {
+  font-size: 15px;
+  font-weight: bold;
+  color: #222;
+  text-align: left;
+}
+
+.no-products {
+  
+  font-size: 16px;
+  color: #888;
+  margin-top: 30px;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1024px) {
+  .watches-container {
+    flex-direction: column;
+  }
+
+  .filter-container {
+    width: 100%;
+    position: relative;
+    margin-top: 20px;
+  }
+
+  .product-container {
+    width: 100%;
+    margin-top: 20px;
+  }
+
+  .products {
+    justify-content: center; /* center on smaller screens */
+  }
+}
+
+@media (max-width: 600px) {
+  .products {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 200px));
+    gap: 15px;
+  }
+
+  .product-card {
+    width: 200px;
+  }
+
+  .product-card img {
+    height: 200px;
+  }
 }
