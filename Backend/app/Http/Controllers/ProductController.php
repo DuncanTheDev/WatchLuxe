@@ -8,24 +8,25 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    public function index(Request $request){
+    public function index(Request $request)
+    {
         $query = Product::with('brand');
 
         //filter by brand
-        if($request->has('brand')){
+        if ($request->has('brand')) {
             $query->whereHas('brand', function ($q) use ($request) {
                 $q->where('name', $request->brand);
             });
         }
 
         //filter by gender
-        if($request->has('gender')){
+        if ($request->has('gender')) {
             $query->where('gender', $request->gender);
         }
 
         //sorting
-        if($request->has('sort')){
-            switch($request->sort){
+        if ($request->has('sort')) {
+            switch ($request->sort) {
                 case 'newest':
                     $query->orderBy('created_at', 'desc');
                     break;
@@ -43,15 +44,18 @@ class ProductController extends Controller
     }
 
     //get by single product
-    public function show($id){
+    public function show($id)
+    {
         $product = Product::with('brand')->findOrFail($id);
 
         return response()->json($product, 200);
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         $request->validate([
-            'name'=> 'required|string|max: 255',
+            'name' => 'required|string|max: 255',
+            'ref_num' => 'required|string|max: 20',
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
             'stock' => 'required|numeric|min:0',
@@ -74,23 +78,25 @@ class ProductController extends Controller
         ], 201);
     }
 
-    public function update(Request $request, $id){
+    public function update(Request $request, $id)
+    {
         $product = Product::findOrFail($id);
 
         $request->validate([
-            'name'=> 'sometimes|required|string|max:255',
+            'name' => 'sometimes|string|max:255',
+            'ref_num' => 'sometimes',
             'description' => 'nullable|string',
-            'price' => 'sometimes|required|numeric|min:0',
-            'stock' => 'sometimes|required|numeric|min:0',
-            'gender' => 'sometimes|required|in:men,women',
+            'price' => 'sometimes|numeric|min:0',
+            'stock' => 'sometimes|numeric|min:0',
+            'gender' => 'sometimes|in:men,women',
             'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-            'brand_id' => 'sometimes|required|exists:brands,id'
+            'brand_id' => 'sometimes|exists:brands,id'
         ]);
 
         $data = $request->all();
 
-        if($request->has('image')){
-            if($product->image && Storage::disk('public')->exists($product->image)){
+        if ($request->has('image')) {
+            if ($product->image && Storage::disk('public')->exists($product->image)) {
                 Storage::disk('public')->delete($product->image);
             }
 
@@ -106,10 +112,11 @@ class ProductController extends Controller
         ], 200);
     }
 
-    public function destroy($id){
+    public function destroy($id)
+    {
         $product = Product::findOrFail($id);
 
-        if($product->image && Storage::disk('public')->exists($product->image)){
+        if ($product->image && Storage::disk('public')->exists($product->image)) {
             Storage::disk('public')->delete($product->image);
         }
 

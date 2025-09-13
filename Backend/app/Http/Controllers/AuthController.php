@@ -10,7 +10,7 @@ class AuthController extends Controller
 {
     public function register(Request $request)
     {
-        $role = $request->input('admin', 'customer'); //default role is customer
+        $role = $request->input('role', 'customer'); // default is customer
 
         if ($role === 'admin') {
             $request->validate([
@@ -33,17 +33,23 @@ class AuthController extends Controller
             ]);
         }
 
-        $user = User::create([
+        $userData = [
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
-            'phone' => $request->phone,
-            'address' => $request->address,
-            'city' => $request->city,
-            'state' => $request->state,
-            'postal_code' => $request->postal_code
-        ]);
+            'role' => $role,
+        ];
+
+        if ($role === 'customer') {
+            $userData['phone'] = $request->phone;
+            $userData['address'] = $request->address;
+            $userData['city'] = $request->city;
+            $userData['state'] = $request->state;
+            $userData['postal_code'] = $request->postal_code;
+        }
+
+        $user = User::create($userData);
 
         $token = $user->createToken($request->email)->plainTextToken;
 
@@ -54,26 +60,6 @@ class AuthController extends Controller
         ], 201);
     }
 
-    public function login(Request $request)
-    {
-        $request->validate([
-            'email' => 'required|email|exists:users,email',
-            'password' => 'required|string'
-        ]);
-
-        $user = User::where('email', $request->email)->first();
-
-        if (!$user && Hash::check($request->password, $user->password)) {
-            return response()->json(['message' => 'Incorrect email or password', 401]);
-        }
-
-        $token = $user->createToken($request->email)->plainTextToken;
-
-        return response()->json([
-            'user' => $user,
-            'token' => $token
-        ], 200);
-    }
 
     public function logout(Request $request)
     {

@@ -8,6 +8,7 @@ class Product extends Model
 {
     protected $fillable = [
         'name',
+        'ref_num',
         'description',
         'price',
         'stock',
@@ -16,15 +17,18 @@ class Product extends Model
         'brand_id'
     ];
 
-    public function brand(){
+    public function brand()
+    {
         return $this->belongsTo(Brand::class);
     }
 
-    public function orderItems(){
+    public function orderItems()
+    {
         return $this->hasMany(Order_Item::class);
     }
 
-    public function cartItems(){
+    public function cartItems()
+    {
         return $this->hasMany(Cart_item::class);
     }
 }
