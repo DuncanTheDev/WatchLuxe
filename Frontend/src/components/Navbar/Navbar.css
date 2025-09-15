@@ -4,7 +4,7 @@
   justify-content: space-between;
   align-items: center;
 
-  position: fixed; /* make it stick */
+  position: sticky; /* make it stick */
   top: 0;
   left: 0;
   width: 100%;
@@ -38,6 +38,7 @@
 
 .cart-icon {
   position: relative;
+  cursor: pointer;
 }
 
 .cart-icon .dot {

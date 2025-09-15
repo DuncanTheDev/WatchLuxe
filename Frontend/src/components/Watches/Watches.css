@@ -3,7 +3,7 @@
   gap: 20px;
   padding: 20px;
   background: #f9f9f9;
-  min-height: calc(100vh - 60px);
+  min-height: calc(100vh);
 }
 
 /* ---------- Filters ---------- */
@@ -84,6 +84,11 @@
   text-align: left;
 }
 
+.link{
+  text-decoration: none;
+  color: black;
+}
+
 .price {
   font-size: 15px;
   font-weight: bold;
@@ -117,6 +122,194 @@
 
   .products {
     justify-content: center; /* center on smaller screens */
+  }
+}
+
+@media (max-width: 600px) {
+  .products {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 200px));
+    gap: 15px;
+  }
+
+  .product-card {
+    width: 200px;
+  }
+
+  .product-card img {
+    height: 200px;
+  }
+}
+
+
+.watches-container {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  background: #f9f9f9;
+  min-height: calc(100vh - 60px);
+}
+
+/* ---------- Filters ---------- */
+.filter-container {
+  position: sticky;
+  top: 100px;
+  align-self: flex-start;
+  margin-top: 100px;
+  width: 20%;
+  min-height: 200px;
+  background: #fff;
+  padding: 20px;
+  border: 1px solid #eee;
+  border-radius: 8px;
+}
+
+.filter-header {
+  font-weight: 600;
+  margin: 15px 0 10px;
+  font-size: 16px;
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 5px 0;
+  font-size: 14px;
+}
+
+/* ---------- Products ---------- */
+.product-container {
+  flex: 1;
+  margin-top: 100px;
+}
+
+.products {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 250px));
+  justify-content: space-evenly;
+  gap: 25px;
+}
+
+.product-card {
+  width: 270px;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  padding: 15px;
+  text-align: center;
+  transition: transform 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.product-card:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+}
+
+.product-card img {
+  width: auto;
+  height: 240px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.brand {
+  font-size: 14px;
+  color: #555;
+  text-align: left;
+}
+
+.ref-num {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 5px 0;
+  text-align: left;
+}
+
+.price {
+  font-size: 15px;
+  font-weight: bold;
+  color: #222;
+  text-align: left;
+}
+
+.no-products {
+  font-size: 16px;
+  color: #888;
+  margin-top: 30px;
+}
+
+/* ---------- Mobile Filter ---------- */
+.mobile-filter-btn {
+  border: 1px solid #eee;
+  background: white;
+  color: black;
+  padding: 10px 20px;
+  margin: 0 0 20px 0;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  
+}
+
+.mobile-filter-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 80%;
+  max-width: 400px;
+  height: 100%;
+  background: white;
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+}
+
+.mobile-filter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  border-bottom: 1px solid #ddd;
+}
+
+.mobile-filter-content {
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* ---------- Responsive ---------- */
+.desktop-only {
+  display: block;
+}
+
+.mobile-only {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+  .watches-container {
+    flex-direction: column;
+  }
+
+  .filter-container.desktop-only {
+    display: none;
+  }
+
+  .mobile-only {
+    display: block;
+  }
+
+  .products {
+    justify-content: center;
   }
 }
 

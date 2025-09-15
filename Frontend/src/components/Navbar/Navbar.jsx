@@ -64,10 +64,11 @@ export default function Navbar() {
 
       {/* Right Section */}
       <div className="navbar-right">
-        <img className="icon" src={assets.search} alt="search_icon" />
         <div className="cart-icon">
-          <img className="icon" src={assets.cart} alt="cart_icon" />
-          <div className="dot"></div>
+          <NavLink to="/cart">
+            <img className="icon" src={assets.cart} alt="cart_icon" />
+            <div className="dot"></div>
+          </NavLink>
         </div>
 
         {/* Account Icon with Dropdown */}
