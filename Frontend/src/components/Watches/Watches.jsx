@@ -10,10 +10,7 @@ export default function Watches() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // React Router search params
   const [searchParams, setSearchParams] = useSearchParams();
-
-  // Load initial state from URL
   const [selectedBrands, setSelectedBrands] = useState(
     searchParams.getAll("brand") || []
   );

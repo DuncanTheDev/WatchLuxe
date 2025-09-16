@@ -6,6 +6,9 @@
   color: #333;
 }
 
+.loading{
+margin: auto;}
+
 .product-detail-container {
   flex: 1;
   display: flex;
@@ -13,7 +16,7 @@
   margin: 40px auto;
   background-color: #fff;
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   overflow: hidden;
 }
 
@@ -77,7 +80,7 @@
 }
 
 .add-cart {
-    margin: auto;
+  margin: auto;
   background-color: black;
   color: white;
   border: none;
@@ -101,7 +104,8 @@
     margin: 20px;
   }
 
-  .product, .details {
+  .product,
+  .details {
     padding: 20px;
   }
 

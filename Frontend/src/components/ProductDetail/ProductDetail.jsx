@@ -24,6 +24,16 @@ export default function ProductDetail() {
     fetchProduct();
   }, [id]);
 
+  if (loading) {
+    return (
+      <div className="product-detail">
+        <Navbar />
+        <p className="loading">Loading product...</p>
+        <Footer />
+      </div>
+    );
+  }
+
   if (!product) {
     return (
       <div className="product-detail">
