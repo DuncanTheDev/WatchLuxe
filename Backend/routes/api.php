@@ -40,6 +40,6 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
 
 
 //cart route
-Route::get('/cart/add', [CartController::class, 'addToCart']);
+Route::post('/cart/add', [CartController::class, 'addToCart']);
 Route::get('/cart', [CartController::class, 'getCart']);
-Route::get('/cart/item/{id}', [CartController::class, 'removeCart']);
+Route::delete('/cart/item/{id}', [CartController::class, 'removeCart']);

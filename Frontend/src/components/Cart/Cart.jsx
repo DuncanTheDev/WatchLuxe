@@ -2,8 +2,33 @@ import "./Cart.css";
 import Navbar from "../Navbar/Navbar";
 import Footer from "../Footer/Footer";
 import assets from "../../assets/assets";
+import { useState, useEffect } from "react";
+import api from "../../api/axios";
 
 export default function Cart() {
+  const [cart, setCart] = useState([]);
+
+  useEffect(() => {
+    const fetchCart = async () => {
+      try {
+        const response = await api.get("/cart");
+
+        console.log(response.data);
+
+        // If backend returned a full cart object
+        if (response.data && response.data.cartItems) {
+          setCart(response.data.cartItems);
+        } else {
+          setCart([]); // fallback for empty cart
+        }
+      } catch (err) {
+        console.error("Failed to fetch cart: ", err);
+        setCart([]); // prevent undefined crash
+      }
+    };
+    fetchCart();
+  }, []);
+
   return (
     <div className="cart">
       <Navbar />
@@ -13,21 +38,32 @@ export default function Cart() {
             <h2>Bag</h2>
           </div>
           <div className="bag">
-            <div className="left-side">
-              <img src={assets.MTPV002D7B3} alt="" />
-              <div className="quantity">
-                <button className="quantity-button">-</button>
-                <div>1</div>
-                <button className="quantity-button">+</button>
-              </div>
-            </div>
-            <div className="middle">
-              <p className="cart-name">Casio</p>
-              <p className="cart-ref_num">MTP-V002D-7B3</p>
-            </div>
-            <div className="right-side">
-              <p className="cart-price">₱ 3000.00</p>
-            </div>
+            {cart.length > 0 ? (
+              cart.map((item) => (
+                <div key={item.id} className="bag-item">
+                  <div className="left-side">
+                    <img
+                      src={`http://127.0.0.1:8000/storage/${item.product.image}`}
+                      alt={item.product.name}
+                    />
+                    <div className="quantity">
+                      <button className="quantity-button">-</button>
+                      <div>{item.quantity}</div>
+                      <button className="quantity-button">+</button>
+                    </div>
+                  </div>
+                  <div className="middle">
+                    <p className="cart-name">{item.product.brand}</p>
+                    <p className="cart-ref_num">{item.product.name}</p>
+                  </div>
+                  <div className="right-side">
+                    <p className="cart-price">₱ {item.product.price}</p>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p>Your cart is empty</p>
+            )}
           </div>
         </div>
         <div className="summary-container">

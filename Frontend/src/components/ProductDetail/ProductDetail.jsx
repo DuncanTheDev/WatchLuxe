@@ -24,6 +24,19 @@ export default function ProductDetail() {
     fetchProduct();
   }, [id]);
 
+  const handleAddToCart = async () => {
+    try {
+      const response = await api.post("/cart/add", {
+        product_id: product.id,
+        quantity: 1,
+      });
+
+      console.log(response.data);
+    } catch (err) {
+      console.error("Failed to add the product to bag: ", err);
+    }
+  };
+
   if (loading) {
     return (
       <div className="product-detail">
@@ -58,7 +71,9 @@ export default function ProductDetail() {
           <p className="ref_num">{product.ref_num}</p>
           <p className="description">{product.description}</p>
           <p className="price">₱ {product.price}</p>
-          <button className="add-cart">Add to Bag</button>
+          <button className="add-cart" onClick={handleAddToCart}>
+            Add to Bag
+          </button>
         </div>
       </div>
       <Footer />
