@@ -53,8 +53,8 @@ export default function Cart() {
                     </div>
                   </div>
                   <div className="middle">
-                    <p className="cart-name">{item.product.brand}</p>
-                    <p className="cart-ref_num">{item.product.name}</p>
+                    <p className="cart-name">{item.product.name}</p>
+                    <p className="cart-ref_num">{item.product.ref_num}</p>
                   </div>
                   <div className="right-side">
                     <p className="cart-price">₱ {item.product.price}</p>

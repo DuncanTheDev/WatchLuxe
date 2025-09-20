@@ -58,6 +58,18 @@ export default function Watches() {
     fetchProducts();
   }, [selectedBrands, selectedGenders, selectedSort]);
 
+  // Auto close mobile filter overlay when resizing back to desktop
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 1024 && showMobileFilter) {
+        setShowMobileFilter(false);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [showMobileFilter]);
+
   // Update filters
   const handleBrandChange = (brand) => {
     const updated = selectedBrands.includes(brand)

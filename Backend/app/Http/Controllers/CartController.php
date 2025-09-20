@@ -59,7 +59,9 @@ class CartController extends Controller
             $cart = Cart::where('session_id', $sessionId)->with('cartItems.product')->first();
         }
 
-        return response()->json($cart ?? ['cartItems' => []]);
+        return response()->json([
+            'cartItems' => $cart ? $cart->cartItems : []
+        ]);
     }
 
     public function clearCart($itemId)
