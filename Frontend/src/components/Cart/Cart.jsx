@@ -1,9 +1,9 @@
 import "./Cart.css";
 import Navbar from "../Navbar/Navbar";
 import Footer from "../Footer/Footer";
-import assets from "../../assets/assets";
 import { useState, useEffect } from "react";
 import api from "../../api/axios";
+import { Link } from "react-router-dom";
 
 export default function Cart() {
   const [cart, setCart] = useState([]);
@@ -29,6 +29,68 @@ export default function Cart() {
     fetchCart();
   }, []);
 
+  const handleIncreaseQuantity = async (item) => {
+    try {
+      const response = await api.put(`/cart/${item.id}`, {
+        quantity: item.quantity + 1,
+      });
+      setCart((prev) =>
+        prev.map((c) =>
+          c.id === item.id
+            ? { ...c, quantity: response.data.cartItems.quantity }
+            : c
+        )
+      );
+    } catch (err) {
+      console.error("Failed to increase quantity: ", err);
+    }
+  };
+
+  const handleDecreaseQuantity = async (item) => {
+    if (item.quantity === 1) {
+      try {
+        await api.delete(`/cart/${item.id}`);
+        setCart((prev) => prev.filter((c) => c.id !== item.id));
+      } catch (err) {
+        console.error("Failed to delete item: ", err);
+      }
+    } else {
+      try {
+        const response = await api.put(`/cart/${item.id}`, {
+          quantity: item.quantity - 1,
+        });
+
+        setCart((prev) =>
+          prev.map((c) =>
+            c.id === item.id
+              ? { ...c, quantity: response.data.cartItems.quantity }
+              : c
+          )
+        );
+      } catch (err) {
+        console.error("Failed to decrease quantity: ", err);
+      }
+    }
+  };
+
+  const calculateTotal = () => {
+    if (!cart || cart.length === 0) {
+      return { subtotal: 0, shipping: 0, tax: 0, total: 0 };
+    }
+
+    const subtotal = cart.reduce(
+      (acc, item) => acc + (item.product?.price || 0) * (item.quantity || 0),
+      0
+    );
+
+    const shipping = 150;
+    const total = subtotal + shipping;
+
+    return { subtotal, shipping, total };
+  };
+
+  const { subtotal, shipping, tax, total } = calculateTotal();
+
   return (
     <div className="cart">
       <Navbar />
@@ -47,9 +109,19 @@ export default function Cart() {
                       alt={item.product.name}
                     />
                     <div className="quantity">
-                      <button className="quantity-button">-</button>
+                      <button
+                        className="quantity-button"
+                        onClick={() => handleDecreaseQuantity(item)}
+                      >
+                        -
+                      </button>
                       <div>{item.quantity}</div>
-                      <button className="quantity-button">+</button>
+                      <button
+                        className="quantity-button"
+                        onClick={() => handleIncreaseQuantity(item)}
+                      >
+                        +
+                      </button>
                     </div>
                   </div>
                   <div className="middle">
@@ -74,39 +146,32 @@ export default function Cart() {
                 <p>Subtotal</p>
               </div>
               <div className="summary-price">
-                <p>₱ 3000.00</p>
+                <p>₱ {subtotal.toFixed(2)}</p>
               </div>
             </div>
             <div className="shipping">
               <div className="label">
-                <p>Subtotal</p>
+                <p>Shipping</p>
               </div>
               <div className="summary-price">
-                <p>₱ 0</p>
-              </div>
-            </div>
-            <div className="tax">
-              <div className="label">
-                <p>Tax</p>
-              </div>
-              <div className="summary-price">
-                <p>₱ 0</p>
+                <p>₱ {shipping.toFixed(2)}</p>
               </div>
             </div>
           </div>
-
-          <div className="summary">
-            <div className="total-price">
-              <div className="label">
-                <p>Total Price</p>
-              </div>
-              <div className="summary-price">
-                <p>₱ 3000.00</p>
-              </div>
+          <hr />
+          <div className="total-price">
+            <div className="label">
+              <p>Total Price</p>
+            </div>
+            <div className="summary-price">
+              <p>₱ {total.toFixed(2)}</p>
             </div>
           </div>
-          <div className="checkout">
-            <button className="btn-checkout">Checkout</button>
+          <hr />
+          <div className="checkout-button">
+            <Link className="btn-checkout" to="/checkout" state={{ subtotal }}>
+              <button>Checkout</button>
+            </Link>
           </div>
         </div>
       </div>

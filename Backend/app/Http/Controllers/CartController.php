@@ -64,7 +64,19 @@ class CartController extends Controller
         ]);
     }
 
-    public function clearCart($itemId)
+    public function updateQuantity(Request $request, $itemId)
+    {
+        $cartItem = Cart_item::findOrFail($itemId);
+        $cartItem->quantity = $request->quantity;
+        $cartItem->save();
+
+        return response()->json([
+            'message'  => "Quantity updated",
+            'cartItems' => $cartItem
+        ]);
+    }
+
+    public function removeCart($itemId)
     {
         $cartItem = Cart_item::findOrFail($itemId);
         $cartItem->delete();

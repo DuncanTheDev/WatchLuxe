@@ -42,4 +42,5 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
 //cart route
 Route::post('/cart/add', [CartController::class, 'addToCart']);
 Route::get('/cart', [CartController::class, 'getCart']);
-Route::delete('/cart/item/{id}', [CartController::class, 'removeCart']);
+Route::put('/cart/{itemId}', [CartController::class, 'updateQuantity']);
+Route::delete('/cart/{itemId}', [CartController::class, 'removeCart']);

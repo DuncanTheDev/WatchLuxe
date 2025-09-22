@@ -3,6 +3,7 @@ import video from "../../assets/watch.mp4";
 import "./Home.css";
 import assets from "../../assets/assets";
 import Footer from "../Footer/Footer";
+import { Link } from "react-router-dom";
 
 export default function Home() {
   return (
@@ -22,24 +23,24 @@ export default function Home() {
       <div className="card-container">
         <h1>Shop By Brand</h1>
         <div className="cards">
-          <div className="card">
+          <Link to="/watches?brand=Casio" className="card">
             <img className="brand-logo" src={assets.casio} alt="" />
-          </div>
-          <div className="card">
+          </Link>
+          <Link to="watches?brand=Seiko" className="card">
             <img className="brand-logo" src={assets.seiko} alt="" />
-          </div>
-          <div className="card">
+          </Link>
+          <Link to="watches?brand=Fossil" className="card">
             <img className="brand-logo" src={assets.fossil} alt="" />
-          </div>
-          <div className="card">
+          </Link>
+          <Link to="watches?brand=Timex" className="card">
             <img className="brand-logo" src={assets.timex} alt="" />
-          </div>
-          <div className="card">
+          </Link>
+          <Link to="watches?brand=Swatch" className="card">
             <img className="brand-logo" src={assets.swatch} alt="" />
-          </div>
-          <div className="card">
+          </Link>
+          <Link to="watches?brand=Citizen" className="card">
             <img className="brand-logo" src={assets.citizen} alt="" />
-          </div>
+          </Link>
         </div>
       </div>
       <div className="recommend">
@@ -83,7 +84,7 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <Footer/>
+      <Footer />
     </div>
   );
 }

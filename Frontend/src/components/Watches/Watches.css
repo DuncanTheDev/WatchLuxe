@@ -30,7 +30,6 @@
 .filter-group {
   display: flex;
   align-items: center;
-  gap: 6px;
   margin: 5px 0;
   font-size: 14px;
 }
