@@ -8,16 +8,21 @@ class Order extends Model
 {
     protected $fillable = [
         'user_id',
+        'subtotal',
+        'shipping_fee',
         'total_price',
+        'shipping_method',
         'status',
         'payment_method'
     ];
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function orderItems(){
+    public function orderItems()
+    {
         return $this->hasMany(Order_Item::class);
     }
 }
