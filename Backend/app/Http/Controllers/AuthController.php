@@ -26,10 +26,6 @@ class AuthController extends Controller
                 'email' => 'required|string|unique:users,email',
                 'password' => 'required|string|min:8',
                 'phone' => 'required|string|max:20',
-                'address' => 'required|string|max:100',
-                'city' => 'required|string|max:50',
-                'state' => 'required|string|max:50',
-                'postal_code' => 'required|string|max:4'
             ]);
         }
 
@@ -43,10 +39,6 @@ class AuthController extends Controller
 
         if ($role === 'customer') {
             $userData['phone'] = $request->phone;
-            $userData['address'] = $request->address;
-            $userData['city'] = $request->city;
-            $userData['state'] = $request->state;
-            $userData['postal_code'] = $request->postal_code;
         }
 
         $user = User::create($userData);
