@@ -3,7 +3,9 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -44,3 +46,6 @@ Route::post('/cart/add', [CartController::class, 'addToCart']);
 Route::get('/cart', [CartController::class, 'getCart']);
 Route::put('/cart/{itemId}', [CartController::class, 'updateQuantity']);
 Route::delete('/cart/{itemId}', [CartController::class, 'removeCart']);
+
+//Place order
+Route::post('/order', [OrderController::class, 'placeOrder']);
