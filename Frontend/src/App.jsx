@@ -6,6 +6,7 @@ import Contact from "./components/Contact/Contact";
 import ProductDetail from "./components/ProductDetail/ProductDetail";
 import Cart from "./components/Cart/Cart";
 import Checkout from "./components/Checkout/Checkout";
+import ThankYou from "./components/Thankyou/Thankyou";
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
         <Route path="/products/:id" element={<ProductDetail />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout" element={<Checkout />} />
+        <Route path="/Thankyou" element={<ThankYou />} />
       </Routes>
     </div>
   );
