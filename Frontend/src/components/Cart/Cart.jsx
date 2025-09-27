@@ -89,7 +89,7 @@ export default function Cart() {
     return { subtotal, shipping, total };
   };
 
-  const { subtotal, shipping, tax, total } = calculateTotal();
+  const { subtotal, shipping, total } = calculateTotal();
 
   return (
     <div className="cart">
@@ -169,7 +169,11 @@ export default function Cart() {
           </div>
           <hr />
           <div className="checkout-button">
-            <Link className="btn-checkout" to="/checkout" state={{ subtotal }}>
+            <Link
+              className="btn-checkout"
+              to="/checkout"
+              state={{ subtotal, cart }}
+            >
               <button>Checkout</button>
             </Link>
           </div>

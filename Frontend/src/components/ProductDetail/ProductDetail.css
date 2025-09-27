@@ -80,6 +80,8 @@
 
 .add-cart {
   margin: auto;
+  display: flex;
+  align-items: center;
   background-color: black;
   color: white;
   border: none;

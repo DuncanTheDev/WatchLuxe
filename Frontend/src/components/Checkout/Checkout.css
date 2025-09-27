@@ -160,6 +160,20 @@ button:active {
   background-color: rgb(48, 48, 48);
 }
 
+input.error {
+  border: 2px solid #d93025 !important;
+}
+
+/* Error message box */
+.form-error {
+  padding: 10px 14px;
+  border-radius: 6px;
+  color: #d93025;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+}
+
 .summary-container {
   width: 350px;
   padding: 20px;
@@ -190,11 +204,10 @@ button:active {
   margin: 15px 0;
 }
 
-
 /* Product summary block */
-.product-summary {
+.summary-item {
   display: flex;
-  gap: 5px;
+  gap: 20px;
   margin-top: 15px;
   padding: 10px;
   /* border: 1px solid #eee; */
@@ -202,8 +215,8 @@ button:active {
   background: #fff;
 }
 
-.product-summary img {
-  width: 120px;
+.summary-item img {
+  width: 50px;
   object-fit: contain;
   border-radius: 6px;
 }
@@ -213,6 +226,7 @@ button:active {
   margin: 3px 0;
   color: #444;
 }
+
 /* Responsive */
 @media (max-width: 900px) {
   .checkout-container {
