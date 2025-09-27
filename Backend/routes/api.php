@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PayPalController;
 use App\Http\Controllers\ProductController;
 
 use Illuminate\Http\Request;
@@ -49,3 +50,8 @@ Route::delete('/cart/{itemId}', [CartController::class, 'removeCart']);
 
 //Place order
 Route::post('/order', [OrderController::class, 'placeOrder']);
+
+//paypal
+Route::post('/paypal/create', [PayPalController::class, 'createTransaction']);
+Route::get('/paypal/capture-order', [PayPalController::class, 'captureOrder']);
+Route::get('/paypal/cancel', [PayPalController::class, 'cancelOrder']);

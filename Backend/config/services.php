@@ -35,4 +35,23 @@ return [
         ],
     ],
 
+    'paypal' => [
+        'mode' =>  env('PAYPAL_MODE', ' sandbox'),
+        'payment_action' => env('PAYPAL_PAYMENT_ACTION', 'Order'),
+        'sandbox' => [
+            'client_id' => env('PAYPAL_SANDBOX_CLIENT_ID'),
+            'client_secret' => env('PAYPAL_SANDBOX_CLIENT_SECRET')
+        ],
+        'currency' => env('PAYPAL_CURRENCY', 'PHP'),
+        'locale' => env('PAYPAL_LOCALE', 'en_US'),
+        'validate_ssl'  => env('PAYPAL_VALIDATE_SSL', true),
+        'notify_url'     => env('PAYPAL_NOTIFY_URL', ''),
+        'return_url'     => env('PAYPAL_RETURN_URL', ''),
+        'cancel_url'     => env('PAYPAL_CANCEL_URL', ''),
+    ],
+    'live' => [
+        'client_id' => env('PAYPAL_LIVE_CLIENT_ID', ''),
+        'client_secret' => env('PAYPAL_LIVE_CLIENT_SECRET', ''),
+    ],
+
 ];
