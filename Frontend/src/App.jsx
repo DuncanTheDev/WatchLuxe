@@ -7,6 +7,8 @@ import ProductDetail from "./components/ProductDetail/ProductDetail";
 import Cart from "./components/Cart/Cart";
 import Checkout from "./components/Checkout/Checkout";
 import ThankYou from "./components/Thankyou/Thankyou";
+import SignIn from "./components/SignIn/Signin";
+import SignUp from "./components/SignUp/SignUp";
 
 export default function App() {
   return (
@@ -20,6 +22,8 @@ export default function App() {
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/Thankyou" element={<ThankYou />} />
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="/signup" element={<SignUp />} />
       </Routes>
     </div>
   );

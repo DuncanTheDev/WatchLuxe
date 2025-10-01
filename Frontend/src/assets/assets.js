@@ -10,6 +10,7 @@ import timex from "./Timex-Logo.png";
 import MTPV002D7B3 from "./Casio MTP-V002D-7B3.jpg";
 import card from "./card-icon.png";
 import paypal from "./paypal-icon.png";
+import check from "./correct.png";
 
 const assets = {
   account,
@@ -24,6 +25,7 @@ const assets = {
   MTPV002D7B3,
   card,
   paypal,
+  check,
 };
 
 export default assets;
