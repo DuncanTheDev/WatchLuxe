@@ -1,0 +1,99 @@
+.signup {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.register-header {
+  margin-top: 80px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.register-form {
+  border: 1px solid #c6c6c6;
+  border-radius: 12px;
+  margin-top: 40px;
+  margin-bottom: 40px;
+  padding: 25px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.register-group {
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  gap: 5px;
+}
+
+.name-group {
+  display: flex;
+  gap: 16px;
+  width: 100%;
+}
+
+.firstname,
+.lastname {
+  flex: 1; /* both take equal width */
+  display: flex;
+  flex-direction: column;
+}
+
+.firstname input,
+.lastname input {
+  width: 100%;
+  box-sizing: border-box;
+}
+.register-form input {
+  padding: 8px;
+  border: 1px solid #c6c6c6;
+  border-radius: 8px;
+}
+
+.register-btn {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.register-btn button {
+  width: 200px;
+}
+
+.signin-acc {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+}
+
+.signin-btn {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.signin:hover {
+  text-decoration: none;
+}
+
+.error-text {
+  color: red;
+  font-size: 0.9rem;
+}
+
+.error {
+  border: 1px solid red;
+  outline: none;
+}
+
+.global-error {
+  margin: auto;
+  color: red;
+}
+
+.register-form label {
+  font-size: 12px;
+  font-weight: bold;
+}
