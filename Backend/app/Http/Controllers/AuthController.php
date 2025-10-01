@@ -12,22 +12,12 @@ class AuthController extends Controller
     {
         $role = $request->input('role', 'customer'); // default is customer
 
-        if ($role === 'admin') {
-            $request->validate([
-                'first_name' => 'required|string|max:50',
-                'last_name' => 'required|string|max:50',
-                'email' => 'required|string|unique:users,email',
-                'password' => 'required|string|min:8'
-            ]);
-        } else {
-            $request->validate([
-                'first_name' => 'required|string|max:50',
-                'last_name' => 'required|string|max:50',
-                'email' => 'required|string|unique:users,email',
-                'password' => 'required|string|min:8',
-                'phone' => 'required|string|max:20',
-            ]);
-        }
+        $request->validate([
+            'first_name' => 'required|string|max:50',
+            'last_name' => 'required|string|max:50',
+            'email' => 'required|string|email|max:255|unique:users,email',
+            'password' => 'required|string|min:8|confirmed',
+        ]);
 
         $userData = [
             'first_name' => $request->first_name,
@@ -36,10 +26,6 @@ class AuthController extends Controller
             'password' => bcrypt($request->password),
             'role' => $role,
         ];
-
-        if ($role === 'customer') {
-            $userData['phone'] = $request->phone;
-        }
 
         $user = User::create($userData);
 
