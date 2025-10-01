@@ -66,7 +66,7 @@ class OrderController extends Controller
 
             // Create shipping address
             $shippingAddress = Address::create([
-                'user_id' => $userId, // This will be null if guest
+                'user_id' => $userId, 
                 'first_name' => $validated['shipping']['first_name'],
                 'last_name' => $validated['shipping']['last_name'],
                 'phone' => $validated['shipping']['phone'],
@@ -81,7 +81,7 @@ class OrderController extends Controller
             $billingAddress = $validated['billing_same']
                 ? $shippingAddress
                 : Address::create([
-                    'user_id' => $userId, // This will be null if guest
+                    'user_id' => $userId, 
                     'first_name' => $validated['billing']['first_name'],
                     'last_name' => $validated['billing']['last_name'],
                     'phone' => $validated['billing']['phone'],
@@ -91,22 +91,19 @@ class OrderController extends Controller
                     'postal_code' => $validated['billing']['postal_code'],
                     'country' => $validated['billing']['country'],
                 ]);
-
-            // Create the order (allow user_id to be null if guest)
             $order = Order::create([
-                'user_id' => $userId, // This will be null if guest
-                'guest_email' => $guestEmail, // Use guest email if no user ID
+                'user_id' => $userId,
+                'guest_email' => $guestEmail,
                 'shipping_address_id' => $shippingAddress->id,
                 'billing_address_id' => $billingAddress->id,
                 'subtotal' => $validated['subtotal'],
                 'shipping_fee' => $validated['shipping_fee'],
                 'total_price' => $validated['total_price'],
                 'shipping_method' => $validated['shipping_method'],
-                'status' => 'pending', // Set the status to pending
+                'status' => 'pending',
                 'payment_method' => $validated['payment_method'],
             ]);
 
-            // Create order items
             foreach ($validated['items'] as $item) {
                 OrderItem::create([
                     'order_id' => $order->id,
@@ -136,6 +133,52 @@ class OrderController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Order failed: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function getOrder(Request $request)
+    {
+        try {
+            $user = Auth::user();
+            $order = null;
+
+            if ($user) {
+                $order = Order::where('user_id', $user->id)
+                    ->with(['orderItems.product', 'shippingAddress', 'billingAddress'])
+                    ->latest()
+                    ->first();
+            } else {
+                $guestEmail = $request->query('guest_email');
+                if ($guestEmail) {
+                    $order = Order::where('guest_email', $guestEmail)
+                        ->with(['orderItems.product', 'shippingAddress', 'billingAddress'])
+                        ->latest()
+                        ->first();
+                }
+            }
+
+            if (!$order) {
+                Log::warning('No order found for request', [
+                    'user_id' => $user ? $user->id : null,
+                    'guest_email' => $request->query('guest_email')
+                ]);
+
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No order found'
+                ], 404);
+            }
+
+            return response()->json([
+                'success' => true,
+                'order' => $order
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Get Order Failed: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to retrieve order.',
             ], 500);
         }
     }

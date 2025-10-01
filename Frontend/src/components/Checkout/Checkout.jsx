@@ -95,6 +95,10 @@ export default function Checkout() {
     setSubmitted(true);
     if (!validateForm()) return;
 
+    if (shipping.email) {
+      localStorage.setItem("guest_email", shipping.email);
+    }
+
     const payload = {
       shipping: shipping,
       billing_same: !showBillingForm,
@@ -105,10 +109,10 @@ export default function Checkout() {
         quantity: item.quantity,
         price: item.product.price,
       })),
-      guest_email: shipping.email,
       subtotal: subtotal,
       shipping_fee: selectedOption?.fee || 0,
       total_price: total,
+      guest_email: shipping.email,
       shipping_method: selectedShipping,
       payment_method: selectedPayment,
     };

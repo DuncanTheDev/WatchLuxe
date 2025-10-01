@@ -4,9 +4,11 @@ import Footer from "../Footer/Footer";
 import { useState, useEffect } from "react";
 import api from "../../api/axios";
 import { Link } from "react-router-dom";
+import { useCart } from "../../context/CartContext";
 
 export default function Cart() {
   const [cart, setCart] = useState([]);
+  const { fetchCartCount, setCartCount } = useCart();
 
   useEffect(() => {
     const fetchCart = async () => {
@@ -41,6 +43,8 @@ export default function Cart() {
             : c
         )
       );
+      setCartCount((prev) => prev + 1);
+      fetchCartCount();
     } catch (err) {
       console.error("Failed to increase quantity: ", err);
     }
@@ -51,6 +55,7 @@ export default function Cart() {
       try {
         await api.delete(`/cart/${item.id}`);
         setCart((prev) => prev.filter((c) => c.id !== item.id));
+        fetchCartCount();
       } catch (err) {
         console.error("Failed to delete item: ", err);
       }
@@ -67,6 +72,7 @@ export default function Cart() {
               : c
           )
         );
+        fetchCartCount();
       } catch (err) {
         console.error("Failed to decrease quantity: ", err);
       }

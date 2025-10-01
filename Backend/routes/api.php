@@ -50,6 +50,7 @@ Route::delete('/cart/{itemId}', [CartController::class, 'removeCart']);
 
 //Place order
 Route::post('/order', [OrderController::class, 'placeOrder']);
+Route::get('/order', [OrderController::class, 'getOrder']);
 
 //paypal
 Route::post('/paypal/create', [PayPalController::class, 'createTransaction']);
