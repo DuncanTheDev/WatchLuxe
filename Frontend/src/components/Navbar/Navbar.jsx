@@ -1,11 +1,17 @@
 import "../Navbar/Navbar.css";
 import assets from "../../assets/assets";
-import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useCart } from "../../context/CartContext";
 
 export default function Navbar() {
   const [openMenu, setOpenMenu] = useState(false);
-  const [accountOpen, setAccountOpen] = useState(false); // dropdown toggle
+  const { cartCount } = useCart();
+  const navigate = useNavigate();
+
+  const handleSignin = () => {
+    navigate("/signin");
+  };
 
   return (
     <div className="navbar">
@@ -67,24 +73,13 @@ export default function Navbar() {
         <div className="cart-icon">
           <NavLink to="/cart">
             <img className="icon" src={assets.cart} alt="cart_icon" />
-            <div className="dot"></div>
+            {cartCount > 0 && <div className="dot">{cartCount}</div>}
           </NavLink>
         </div>
 
         {/* Account Icon with Dropdown */}
         <div className="account-wrapper">
-          <img
-            className="icon"
-            src={assets.account}
-            alt="account_icon"
-            onClick={() => setAccountOpen(!accountOpen)}
-          />
-          {accountOpen && (
-            <div className="account-dropdown">
-              <a href="/signin">Sign In</a>
-              <a href="/signup">Sign Up</a>
-            </div>
-          )}
+          <p onClick={handleSignin}>Sign In</p>
         </div>
 
         {/* Hamburger Icon */}

@@ -173,7 +173,7 @@ export default function Watches() {
                 <div className="mobile-filter-header">
                   <h2>Filter</h2>
                   <button
-                    className="close-btn"
+                    className="close"
                     onClick={() => setShowMobileFilter(false)}
                   >
                     ✖

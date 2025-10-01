@@ -4,11 +4,13 @@ import Footer from "../Footer/Footer";
 import api from "../../api/axios";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { useCart } from "../../context/CartContext";
 
 export default function ProductDetail() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { fetchCartCount, setCartCount } = useCart();
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -31,6 +33,8 @@ export default function ProductDetail() {
         quantity: 1,
       });
 
+      fetchCartCount();
+      setCartCount((prev) => prev + 1);
       console.log(response.data);
     } catch (err) {
       console.error("Failed to add the product to bag: ", err);
