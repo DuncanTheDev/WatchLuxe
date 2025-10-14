@@ -47,12 +47,23 @@ Route::post('/cart/add', [CartController::class, 'addToCart']);
 Route::get('/cart', [CartController::class, 'getCart']);
 Route::put('/cart/{itemId}', [CartController::class, 'updateQuantity']);
 Route::delete('/cart/{itemId}', [CartController::class, 'removeCart']);
+Route::delete('/cart', [CartController::class, 'clearCart']);
 
 //Place order
-Route::post('/order', [OrderController::class, 'placeOrder']);
-Route::get('/order', [OrderController::class, 'getOrder']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/order', [OrderController::class, 'placeOrder']);
+    Route::get('/orders', [OrderController::class, 'getOrder']);
+    Route::get('/thankyou', [OrderController::class, 'getThankYouPage']);
+});
+
+Route::post('/guest/order', [OrderController::class, 'placeOrder']);
+Route::get('/guest/thankyou', [OrderController::class, 'getThankYouPage']);
 
 //paypal
 Route::post('/paypal/create', [PayPalController::class, 'createTransaction']);
 Route::get('/paypal/capture-order', [PayPalController::class, 'captureOrder']);
 Route::get('/paypal/cancel', [PayPalController::class, 'cancelOrder']);
+
+Route::get('/user', function (Request $request) {
+    return $request->user();
+})->middleware('auth:sanctum');
