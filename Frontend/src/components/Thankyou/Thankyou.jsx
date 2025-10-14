@@ -16,10 +16,15 @@ export default function Thankyou() {
   const fetchOrder = async () => {
     try {
       const guestEmail = localStorage.getItem("guest_email");
-
-      const url = guestEmail
-        ? `/order?guest_email=${encodeURIComponent(guestEmail)}`
-        : `/order`;
+      const token = localStorage.getItem("token");
+      let url = "";
+      if (token) {
+        url = "/thankyou";
+      } else if (guestEmail) {
+        url = `/guest/thankyou?guest_email=${encodeURIComponent(guestEmail)}`;
+      } else {
+        return;
+      }
 
       const response = await api.get(url);
       if (response.data.success) {
@@ -49,9 +54,13 @@ export default function Thankyou() {
             Placed on {new Date(info?.created_at).toLocaleDateString()}
           </p>
           {product.map((item) => (
-            <div className="order-items">
+            <div key={item.id} className="order-items">
               <div className="item-img">
-                <img className="img" src={`http://127.0.0.1:8000/storage/${item.product.image}`} alt="" />
+                <img
+                  className="img"
+                  src={`http://127.0.0.1:8000/storage/${item.product.image}`}
+                  alt=""
+                />
               </div>
               <div className="item-details">
                 <p>{item.product?.name}</p>
