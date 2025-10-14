@@ -1,10 +1,12 @@
 import "./SignIn.css";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useCart } from "../../context/CartContext";
 import api from "../../api/axios";
 
 export default function SignIn() {
   const navigate = useNavigate();
+  const { fetchCartCount } = useCart();
 
   const handleSignUp = () => {
     navigate("/signup");
@@ -31,6 +33,7 @@ export default function SignIn() {
       console.log("Login successful: ", response.data);
       localStorage.setItem("token", response.data.token);
 
+      await fetchCartCount();
       navigate("/");
     } catch (err) {
       console.error("Login Failed, Please try again: ", err);
