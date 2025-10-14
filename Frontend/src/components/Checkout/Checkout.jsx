@@ -1,7 +1,7 @@
 import "./Checkout.css";
 import assets from "../../assets/assets";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import api from "../../api/axios";
 
 export default function Checkout() {
@@ -11,6 +11,7 @@ export default function Checkout() {
   const [selectedPayment, setSelectedPayment] = useState("card");
   const [errorMessage, setErrorMessage] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const [shipping, setShipping] = useState({
     email: "",
@@ -112,7 +113,7 @@ export default function Checkout() {
       subtotal: subtotal,
       shipping_fee: selectedOption?.fee || 0,
       total_price: total,
-      guest_email: shipping.email,
+      guest_email: !isLoggedIn ? shipping.email : null,
       shipping_method: selectedShipping,
       payment_method: selectedPayment,
     };
@@ -120,8 +121,16 @@ export default function Checkout() {
     console.log("Payload to send:", payload);
 
     try {
-      const response = await api.post("/order", payload);
+      const endpoint = isLoggedIn ? "/order" : "/guest/order";
+      const response = await api.post(endpoint, payload);
       const order = response.data.order;
+
+      try {
+        await api.delete("/cart");
+        console.log("Cart cleared successfully");
+      } catch (err) {
+        console.error("Failed to clear cart: ", err);
+      }
 
       if (selectedPayment === "paypal") {
         const paypalResponse = await api.post("/paypal/create", {
@@ -165,6 +174,23 @@ export default function Checkout() {
     }
   }, [location]);
 
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsLoggedIn(!!token);
+
+    if (token) {
+      api.get("/user").then((res) => {
+        const user = res.data;
+        setShipping((prev) => ({
+          ...prev,
+          email: user.email || "",
+          first_name: user.first_name || "",
+          last_name: user.last_name || "",
+        }));
+      });
+    }
+  }, []);
+
   return (
     <div>
       {/* Navbar */}
@@ -185,7 +211,9 @@ export default function Checkout() {
               value={shipping.email}
               onChange={(e) => handleChange(e, "shipping")}
               placeholder="Email"
+              readOnly={isLoggedIn}
             />
+
             <input
               type="text"
               name="phone"
@@ -206,6 +234,7 @@ export default function Checkout() {
                 value={shipping.first_name}
                 onChange={(e) => handleChange(e, "shipping")}
                 placeholder="First name"
+                readOnly={isLoggedIn}
               />
               <input
                 className={submitted && !shipping.last_name ? "error" : ""}
@@ -214,6 +243,7 @@ export default function Checkout() {
                 value={shipping.last_name}
                 onChange={(e) => handleChange(e, "shipping")}
                 placeholder="Last name"
+                readOnly={isLoggedIn}
               />
             </div>
             <input
