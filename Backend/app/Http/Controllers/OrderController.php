@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Address;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\Product;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -52,7 +53,7 @@ class OrderController extends Controller
                 'items.*.price' => 'required|numeric|min:0',
 
                 // Guest email or logged-in user
-                'guest_email' => 'nullable|email|required_without:user_id',
+                'guest_email' => 'nullable|email',
                 'subtotal' => 'required|numeric|min:0',
                 'shipping_fee' => 'required|numeric|min:0',
                 'total_price' => 'required|numeric|min:0',
@@ -66,7 +67,7 @@ class OrderController extends Controller
 
             // Create shipping address
             $shippingAddress = Address::create([
-                'user_id' => $userId, 
+                'user_id' => $userId,
                 'first_name' => $validated['shipping']['first_name'],
                 'last_name' => $validated['shipping']['last_name'],
                 'phone' => $validated['shipping']['phone'],
@@ -81,7 +82,7 @@ class OrderController extends Controller
             $billingAddress = $validated['billing_same']
                 ? $shippingAddress
                 : Address::create([
-                    'user_id' => $userId, 
+                    'user_id' => $userId,
                     'first_name' => $validated['billing']['first_name'],
                     'last_name' => $validated['billing']['last_name'],
                     'phone' => $validated['billing']['phone'],
@@ -111,6 +112,16 @@ class OrderController extends Controller
                     'quantity' => $item['quantity'],
                     'price' => $item['price'],
                 ]);
+
+                $product = Product::find($item['product_id']);
+                if ($product) {
+                    if ($product->stock >= $item['quantity']) {
+                        $product->stock -= $item['quantity'];
+                        $product->save();
+                    } else {
+                        throw new Exception("Insufficient stock for product ID: " . $item['product_id']);
+                    }
+                }
             }
 
             // Commit the transaction
@@ -137,7 +148,49 @@ class OrderController extends Controller
         }
     }
 
-    public function getOrder(Request $request)
+    public function getOrder()
+    {
+        try {
+            $user = Auth::user();
+
+            if (!$user) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Unauthorized access. Please log in first.'
+                ], 401);
+            }
+
+            // Fetch all orders for this user with order items + products
+            $orders = Order::where('user_id', $user->id)
+                ->with(['orderItems.product'])
+                ->latest()
+                ->get();
+
+            if ($orders->isEmpty()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No orders found.'
+                ], 404);
+            }
+
+            return response()->json([
+                'success' => true,
+                'order' => $orders
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Get Order Failed: ' . $e->getMessage(), [
+                'user_id' => Auth::id()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to retrieve orders.'
+            ], 500);
+        }
+    }
+
+
+    public function getThankYouPage(Request $request)
     {
         try {
             $user = Auth::user();
