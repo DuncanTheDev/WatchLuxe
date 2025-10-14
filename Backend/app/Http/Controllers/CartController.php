@@ -83,4 +83,22 @@ class CartController extends Controller
 
         return response()->json(['message' => "Item removed from cart"]);
     }
+
+    public function clearCart(Request $request)
+    {
+        $userId    = Auth::id();
+        $sessionId = $request->session()->getId();
+
+        if ($userId) {
+            $cart = Cart::where('user_id', $userId)->first();
+        } else {
+            $cart = Cart::where('session_id', $sessionId)->first();
+        }
+
+        if ($cart) {
+            Cart_item::where('cart_id', $cart->id)->delete();
+        }
+
+        return response()->json(['message' => "Cart cleared"]);
+    }
 }
