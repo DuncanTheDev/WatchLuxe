@@ -6,16 +6,48 @@ import { useCart } from "../../context/CartContext";
 
 export default function Navbar() {
   const [openMenu, setOpenMenu] = useState(false);
-  const { cartCount } = useCart();
+  const { cartCount, fetchCartCount, setCartCount } = useCart();
   const navigate = useNavigate();
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsLoggedIn(!!token);
+  }, []);
 
   const handleSignin = () => {
     navigate("/signin");
   };
 
+  const handleLogout = async () => {
+    localStorage.removeItem("token");
+    setIsLoggedIn(false);
+
+    try {
+      await fetchCartCount();
+    } catch (err) {
+      console.error("Failed to fetch guest cart: ", error);
+      setCartCount(0);
+    }
+
+    setTimeout(() => {
+      navigate("/");
+    }, 2000);
+  };
+
+  const handleMyAccount = () => {
+    navigate("/my-account");
+  };
+
+  const handleOrderHistory = () => {
+    navigate("/orders");
+  };
+
   return (
     <div className="navbar">
-      <h1 className="logo">WatchLuxe</h1>
+      <h1 className="logo" onClick={() => navigate("/")}>WatchLuxe</h1>
 
       {/* Menu List */}
       <ul className={`menu-list ${openMenu ? "open" : ""}`}>
@@ -77,9 +109,26 @@ export default function Navbar() {
           </NavLink>
         </div>
 
-        {/* Account Icon with Dropdown */}
-        <div className="account-wrapper">
-          <p onClick={handleSignin}>Sign In</p>
+        {/* Account Dropdown */}
+        <div
+          className="account-wrapper"
+          onMouseEnter={() => setShowDropdown(true)}
+          onMouseLeave={() => setShowDropdown(false)}
+        >
+          {isLoggedIn ? (
+            <>
+              <p className="account-text">Account</p>
+              {showDropdown && (
+                <div className="account-dropdown">
+                  <p onClick={handleMyAccount}>My Account</p>
+                  <p onClick={handleOrderHistory}>Order History</p>
+                  <p onClick={handleLogout}>Logout</p>
+                </div>
+              )}
+            </>
+          ) : (
+            <p onClick={handleSignin}>Sign In</p>
+          )}
         </div>
 
         {/* Hamburger Icon */}
