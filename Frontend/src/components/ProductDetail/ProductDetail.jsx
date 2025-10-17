@@ -75,8 +75,12 @@ export default function ProductDetail() {
           <p className="ref_num">{product.ref_num}</p>
           <p className="description">{product.description}</p>
           <p className="price">₱ {product.price}</p>
-          <button className="add-cart" onClick={handleAddToCart}>
-            Add to Bag
+          <button
+            className={`add-cart ${product.stock === 0 ? "out-of-stock" : ""}`}
+            onClick={handleAddToCart}
+            disabled={product.stock === 0}
+          >
+            {product.stock === 0 ? "Out of Stock" : "Add to Bag"}
           </button>
         </div>
       </div>
