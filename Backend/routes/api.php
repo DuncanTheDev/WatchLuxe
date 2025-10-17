@@ -6,9 +6,11 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PayPalController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ContactController;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Mail;
 
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
@@ -67,3 +69,7 @@ Route::get('/paypal/cancel', [PayPalController::class, 'cancelOrder']);
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
+
+
+Route::post('/contact', [ContactController::class, 'sendEmail']);
+
