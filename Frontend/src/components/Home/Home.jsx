@@ -23,6 +23,15 @@ export default function Home() {
     fetchRecommend();
   }, []);
 
+  const brands = [
+    { name: "Casio", image: assets.casio },
+    { name: "Seiko", image: assets.seiko },
+    { name: "Fossil", image: assets.fossil },
+    { name: "Timex", image: assets.timex },
+    { name: "Swatch", image: assets.swatch },
+    { name: "Citizen", image: assets.citizen },
+  ];
+
   return (
     <div>
       <Navbar />
@@ -40,24 +49,15 @@ export default function Home() {
       <div className="card-container">
         <h1>Shop By Brand</h1>
         <div className="cards">
-          <Link to="/watches?brand=Casio" className="card">
-            <img className="brand-logo" src={assets.casio} alt="" />
-          </Link>
-          <Link to="watches?brand=Seiko" className="card">
-            <img className="brand-logo" src={assets.seiko} alt="" />
-          </Link>
-          <Link to="watches?brand=Fossil" className="card">
-            <img className="brand-logo" src={assets.fossil} alt="" />
-          </Link>
-          <Link to="watches?brand=Timex" className="card">
-            <img className="brand-logo" src={assets.timex} alt="" />
-          </Link>
-          <Link to="watches?brand=Swatch" className="card">
-            <img className="brand-logo" src={assets.swatch} alt="" />
-          </Link>
-          <Link to="watches?brand=Citizen" className="card">
-            <img className="brand-logo" src={assets.citizen} alt="" />
-          </Link>
+          {brands.map((brand) => (
+            <Link
+              key={brand.name}
+              to={`/watches?brand=${brand.name}`}
+              className="card"
+            >
+              <img className="brand-logo" src={brand.image} alt={brand.name} />
+            </Link>
+          ))}
         </div>
       </div>
       <div className="recommend">
