@@ -82,10 +82,22 @@
   padding: 20px;
 }
 
+/* flex: 0 0 calc(25% - 20px);
+scroll-snap-align: center;
+width: 330px;
+height: 180px;
+border-radius: 12px;
+margin: auto;
+display: flex;
+align-items: center;
+justify-content: center;
+background: white;
+border: 1px solid rgb(218, 218, 218);
+box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+transition: transform 0.3s ease, box-shadow 0.3s ease; */
 .recommend-card {
   flex: 0 0 calc(25% - 80px);
-  scroll-snap-align: center;
-  width: 280px;
+  width: 380px;
   height: auto;
   padding: 20px;
   border-radius: 12px;
@@ -103,9 +115,16 @@
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
 
+.card-img {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
 .recommend-card img {
-  width: 100%;
-  height: 250px;
+  width: 160px;
+  height: 240px;
+  object-fit: cover;
 }
 
 /* iPad / Tablet View */
@@ -138,14 +157,9 @@
   .brand-logo {
     width: 150px;
   }
-
   .recommend-card {
-    flex: 0 0 40%;
+    flex: 0 0 30%; /* Show ~2 cards per screen */
     width: auto;
-  }
-
-  .recommend-card img {
-    height: 200px;
   }
 }
 
@@ -195,17 +209,8 @@
     width: 120px;
   }
 
-  .recommend-cards {
-    gap: 15px;
-    padding: 10px;
-  }
-
   .recommend-card {
-    flex: 0 0 60%; /* one product per scroll */
+    flex: 0 0 40%; /* Show 1 card more prominently */
     width: auto;
-  }
-
-  .recommend-card img {
-    height: 180px;
   }
 }

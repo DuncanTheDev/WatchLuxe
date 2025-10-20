@@ -7,7 +7,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PayPalController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ContactController;
-
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Mail;
@@ -36,6 +36,7 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
 //product route
 Route::get('/products', [ProductController::class, 'index']);
 Route::get('/products/{id}', [ProductController::class, 'show']);
+Route::get('/recommended', [ProductController::class, 'getRecommend']);
 
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::post('products', [ProductController::class, 'store']);

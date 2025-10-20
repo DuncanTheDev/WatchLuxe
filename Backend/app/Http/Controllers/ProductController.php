@@ -128,4 +128,11 @@ class ProductController extends Controller
             'message' => "Product deleted successfully"
         ], 200);
     }
+
+    public function getRecommend()
+    {
+        $products = Product::inRandomOrder()->take(7)->get();
+
+        return response()->json($products);
+    }
 }
