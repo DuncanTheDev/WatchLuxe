@@ -50,6 +50,7 @@ Route::get('/cart', [CartController::class, 'getCart']);
 Route::put('/cart/{itemId}', [CartController::class, 'updateQuantity']);
 Route::delete('/cart/{itemId}', [CartController::class, 'removeCart']);
 Route::delete('/cart', [CartController::class, 'clearCart']);
+Route::post('/merge-cart', [CartController::class, 'mergeCart']);
 
 //Place order
 Route::middleware('auth:sanctum')->group(function () {
@@ -72,4 +73,3 @@ Route::get('/user', function (Request $request) {
 
 
 Route::post('/contact', [ContactController::class, 'sendEmail']);
-

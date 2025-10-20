@@ -33,6 +33,13 @@ export default function SignIn() {
       console.log("Login successful: ", response.data);
       localStorage.setItem("token", response.data.token);
 
+      try {
+        await api.post("/merge-court");
+        console.log("Guest cart merged successfully");
+      } catch (mergeErr) {
+        console.warn("No guest cart to merge or merge failed", mergeErr);
+      }
+
       await fetchCartCount();
       navigate("/");
     } catch (err) {

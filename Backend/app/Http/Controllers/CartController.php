@@ -101,4 +101,42 @@ class CartController extends Controller
 
         return response()->json(['message' => "Cart cleared"]);
     }
+
+    public function mergeCart(Request $request)
+    {
+        $userId    = Auth::id();
+        $sessionId = $request->session()->getId();
+
+        if (!$userId) {
+            return response()->json(['message' => 'User not logged in'], 401);
+        }
+
+        $guestCart = Cart::Where('session_id', $sessionId)->with('cartItems')->first();
+
+        $userCart = Cart::firstOrCreate(['user_id' => $userId]);
+
+        if ($guestCart) {
+            foreach ($guestCart->cartItems as $guestItem) {
+                $existingItem = Cart_item::where('cart_id', $userCart->id)
+                    ->where('product_id', $guestCart->product_id)
+                    ->first();
+
+                if ($existingItem) {
+                    $existingItem->quantity += $guestItem->quantity;
+                    $existingItem->save();
+                } else {
+                    Cart_item::create([
+                        'cart_id' => $userCart->id,
+                        'product_id' => $guestItem->product_id,
+                        'quantity' => $guestItem->quantity
+                    ]);
+                }
+            }
+
+            $guestCart->cartItems()->delete();
+            $guestCart->delete();
+        }
+
+        return response()->json(['message', 'Guest cart merged successfully']);
+    }
 }
