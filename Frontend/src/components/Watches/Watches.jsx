@@ -11,26 +11,18 @@ export default function Watches() {
   const [loading, setLoading] = useState(true);
 
   const [searchParams, setSearchParams] = useSearchParams();
-  const [selectedBrands, setSelectedBrands] = useState(
-    searchParams.getAll("brand") || []
-  );
-  const [selectedGenders, setSelectedGenders] = useState(
-    searchParams.getAll("gender") || []
-  );
-  const [selectedSort, setSelectedSort] = useState(
-    searchParams.get("sort") || ""
-  );
+  const [selectedBrands, setSelectedBrands] = useState(searchParams.getAll("brand") || []);
+  const [selectedGenders, setSelectedGenders] = useState(searchParams.getAll("gender") || []);
+  const [selectedSort, setSelectedSort] = useState(searchParams.get("sort") || "");
 
   const [showMobileFilter, setShowMobileFilter] = useState(false);
 
   // Update URL when filters change
   const updateURL = (brands, genders, sort) => {
     const params = new URLSearchParams();
-
     brands.forEach((b) => params.append("brand", b));
     genders.forEach((g) => params.append("gender", g));
     if (sort) params.set("sort", sort);
-
     setSearchParams(params);
   };
 
@@ -53,12 +45,21 @@ export default function Watches() {
     }
   };
 
-  // Re-fetch when filters change
   useEffect(() => {
     fetchProducts();
   }, [selectedBrands, selectedGenders, selectedSort]);
 
-  // Update filters
+  // Auto-close mobile filter if screen resized to desktop
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 1024 && showMobileFilter) {
+        setShowMobileFilter(false);
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [showMobileFilter]);
+
   const handleBrandChange = (brand) => {
     const updated = selectedBrands.includes(brand)
       ? selectedBrands.filter((b) => b !== brand)
@@ -80,23 +81,20 @@ export default function Watches() {
     updateURL(selectedBrands, selectedGenders, sort);
   };
 
-  // ---------- Filter UI ----------
   const filterUI = (
     <>
       <h3 className="filter-header">Brand</h3>
-      {["Casio", "Seiko", "Fossil", "Timex", "Swatch", "Citizen"].map(
-        (brand) => (
-          <div className="filter-group" key={brand}>
-            <input
-              type="checkbox"
-              id={brand}
-              checked={selectedBrands.includes(brand)}
-              onChange={() => handleBrandChange(brand)}
-            />
-            <label htmlFor={brand}>{brand}</label>
-          </div>
-        )
-      )}
+      {["Casio", "Seiko", "Fossil", "Timex", "Swatch", "Citizen"].map((brand) => (
+        <div className="filter-group" key={brand}>
+          <input
+            type="checkbox"
+            id={brand}
+            checked={selectedBrands.includes(brand)}
+            onChange={() => handleBrandChange(brand)}
+          />
+          <label htmlFor={brand}>{brand}</label>
+        </div>
+      ))}
 
       <h3 className="filter-header">Gender</h3>
       {["Men", "Women"].map((gender) => (
@@ -135,12 +133,9 @@ export default function Watches() {
     <div>
       <Navbar />
       <div className="watches-container">
-        {/* Desktop Filter */}
         <div className="filter-container desktop-only">{filterUI}</div>
 
-        {/* Products */}
         <div className="product-container">
-          {/* Mobile Filter Button */}
           <button
             className="mobile-filter-btn mobile-only"
             onClick={() => setShowMobileFilter(true)}
@@ -148,7 +143,6 @@ export default function Watches() {
             Filter
           </button>
 
-          {/* Mobile Filter Overlay */}
           <AnimatePresence>
             {showMobileFilter && (
               <motion.div
@@ -160,20 +154,16 @@ export default function Watches() {
               >
                 <div className="mobile-filter-header">
                   <h2>Filter</h2>
-                  <button
-                    className="close-btn"
-                    onClick={() => setShowMobileFilter(false)}
-                  >
-                    ✖
-                  </button>
+                  <button className="close" onClick={() => setShowMobileFilter(false)}>✖</button>
                 </div>
                 <div className="mobile-filter-content">{filterUI}</div>
               </motion.div>
             )}
           </AnimatePresence>
 
-          {/* Product List */}
-          {loading ? null : products.length > 0 ? (
+          {loading ? (
+            <p>Loading...</p>
+          ) : products.length > 0 ? (
             <motion.div
               className="products"
               initial="hidden"
@@ -185,27 +175,14 @@ export default function Watches() {
             >
               <AnimatePresence>
                 {products.map((product) => (
-                  <Link
-                    className="link"
-                    to={`/products/${product.id}`}
-                    key={product.id}
-                  >
+                  <Link className="link" to={`/products/${product.id}`} key={product.id}>
                     <motion.div
-                      key={product.id}
                       className="product-card"
                       variants={{
                         hidden: { opacity: 0, y: 25 },
-                        show: {
-                          opacity: 1,
-                          y: 0,
-                          transition: { duration: 0.35 },
-                        },
+                        show: { opacity: 1, y: 0, transition: { duration: 0.35 } },
                       }}
-                      exit={{
-                        opacity: 0,
-                        y: -15,
-                        transition: { duration: 0.2 },
-                      }}
+                      exit={{ opacity: 0, y: -15, transition: { duration: 0.2 } }}
                     >
                       <motion.img
                         src={`http://127.0.0.1:8000/storage/${product.image}`}

@@ -12,26 +12,12 @@ class AuthController extends Controller
     {
         $role = $request->input('role', 'customer'); // default is customer
 
-        if ($role === 'admin') {
-            $request->validate([
-                'first_name' => 'required|string|max:50',
-                'last_name' => 'required|string|max:50',
-                'email' => 'required|string|unique:users,email',
-                'password' => 'required|string|min:8'
-            ]);
-        } else {
-            $request->validate([
-                'first_name' => 'required|string|max:50',
-                'last_name' => 'required|string|max:50',
-                'email' => 'required|string|unique:users,email',
-                'password' => 'required|string|min:8',
-                'phone' => 'required|string|max:20',
-                'address' => 'required|string|max:100',
-                'city' => 'required|string|max:50',
-                'state' => 'required|string|max:50',
-                'postal_code' => 'required|string|max:4'
-            ]);
-        }
+        $request->validate([
+            'first_name' => 'required|string|max:50',
+            'last_name' => 'required|string|max:50',
+            'email' => 'required|string|email|max:255|unique:users,email',
+            'password' => 'required|string|min:8|confirmed',
+        ]);
 
         $userData = [
             'first_name' => $request->first_name,
@@ -40,14 +26,6 @@ class AuthController extends Controller
             'password' => bcrypt($request->password),
             'role' => $role,
         ];
-
-        if ($role === 'customer') {
-            $userData['phone'] = $request->phone;
-            $userData['address'] = $request->address;
-            $userData['city'] = $request->city;
-            $userData['state'] = $request->state;
-            $userData['postal_code'] = $request->postal_code;
-        }
 
         $user = User::create($userData);
 

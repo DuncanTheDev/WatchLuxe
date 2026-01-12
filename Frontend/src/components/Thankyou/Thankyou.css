@@ -1,0 +1,126 @@
+.Thankyou {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.thankyou-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 50px;
+}
+
+.check {
+  width: 4rem;
+  margin-bottom: 15px;
+}
+
+.thankyou-content {
+  display: flex;
+  gap: 20px;
+}
+
+.order-summary {
+  width: 530px;
+  padding: 20px 25px;
+  border: 2px solid #eee;
+  border-radius: 12px;
+}
+
+.title {
+  font-size: 24px;
+}
+
+.order-date {
+  color: #636363;
+  font-size: 14px;
+}
+
+.order-items {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 0;
+}
+
+.item-img {
+  flex-shrink: 0;
+  width: 100px;
+  height: 100px;
+}
+.item-img {
+  flex-shrink: 0;
+  width: 110px;
+  height: 110px;
+}
+
+.img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* Keeps aspect ratio without stretching */
+  border: 1px solid #eee;
+  border-radius: 12px;
+  padding: 5px;
+}
+
+.item-details {
+  flex-grow: 1;
+  padding-left: 10px;
+}
+
+.item-name {
+  font-weight: bold;
+  margin: 0;
+}
+
+.item-qty {
+  margin: 0;
+  font-size: 0.9em;
+  color: #666;
+}
+
+.price-details,
+.total {
+  padding: 20px 0;
+}
+
+.price-group {
+  display: flex;
+  justify-content: space-between;
+  padding: 3px 0px;
+}
+
+.shipping-info {
+  width: 400px;
+  height: fit-content;
+  padding: 20px 25px;
+  border: 2px solid #eee;
+  border-radius: 12px;
+  position: sticky;
+}
+
+.customer-name {
+  margin-top: 20px;
+}
+.customer-name p {
+  padding: 3px 0px;
+}
+
+.continue-button {
+  padding: 50px;
+}
+.continue-btn {
+  width: 300px;
+  background-color: black;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.continue-btn:hover {
+  opacity: 0.9;
+  transform: scale(1.01);
+}
+
+.continue-btn:active {
+  transform: scale(0.98);
+}

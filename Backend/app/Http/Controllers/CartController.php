@@ -12,72 +12,131 @@ class CartController extends Controller
     public function addToCart(Request $request)
     {
         $request->validate([
-            'product_id' => 'required|exists:products, id',
-            'quantity' => 'required|integer|min: 1'
+            'product_id' => 'required|exists:products,id',
+            'quantity'   => 'required|integer|min:1'
         ]);
 
-        //get the logged-in user or null if guest
-        $userId = Auth::id();
+        $userId    = Auth::id();
+        $sessionId = $request->session()->getId();
 
-        //if logged-in user check if cart already exist, fetch it
-        //if not, create a cart for a user
-        //only 1 cart per user
+        // Fetch or create cart depending on logged-in or guest
         if ($userId) {
             $cart = Cart::firstOrCreate(['user_id' => $userId]);
         } else {
-            $cartId = $request->session()->get('cart_id'); // if guest use session
-
-            if (!$cartId) { //if cart doesn't exist
-                $cart = Cart::create(['user_id' => $userId]); //create a new cart with user_id = null
-                $request->session()->put('cart_id', $cart->id); // store into session cart_id
-            } else {
-                $cart = Cart::findOrFail($cartId); //if cart exist in session, fetch it
-            }
+            $cart = Cart::firstOrCreate(['session_id' => $sessionId]);
         }
 
-        //check if the product is already in the cart
-        $cartItem = Cart_Item::where('cart_id', $cart->id)
+        // Check if product already exists in the cart
+        $cartItem = Cart_item::where('cart_id', $cart->id)
             ->where('product_id', $request->product_id)
             ->first();
 
-
-        //if product exist in the cart increment the quantity
         if ($cartItem) {
             $cartItem->quantity += $request->quantity;
             $cartItem->save();
-        } else { //not exist create a new one
+        } else {
             Cart_item::create([
-                'cart_id' => $cartId,
+                'cart_id'    => $cart->id,
                 'product_id' => $request->product_id,
-                'quantity' => $request->quantity,
+                'quantity'   => $request->quantity,
             ]);
         }
 
         return response()->json([
             'message' => 'Product added to cart',
-            'cart' => $cart->load('items.product'),
+            'cart'    => $cart->load('cartItems.product'),
         ], 201);
     }
 
     public function getCart(Request $request)
     {
-        $userId = Auth::id();
+        $userId    = Auth::id();
+        $sessionId = $request->session()->getId();
 
         if ($userId) {
-            $cart = Cart::where('user_id', $userId)->with('items.product')->first();
+            $cart = Cart::where('user_id', $userId)->with('cartItems.product')->first();
         } else {
-            $cartId = $request->session()->get('cart_id');
-            $cart = $cartId ? Cart::with('items_product')->find($cartId) : null;
+            $cart = Cart::where('session_id', $sessionId)->with('cartItems.product')->first();
         }
 
-        return response()->json($cart ?? ['items' => []]);
+        return response()->json([
+            'cartItems' => $cart ? $cart->cartItems : []
+        ]);
     }
 
-    public function clearCart($itemId)
+    public function updateQuantity(Request $request, $itemId)
+    {
+        $cartItem = Cart_item::findOrFail($itemId);
+        $cartItem->quantity = $request->quantity;
+        $cartItem->save();
+
+        return response()->json([
+            'message'  => "Quantity updated",
+            'cartItems' => $cartItem
+        ]);
+    }
+
+    public function removeCart($itemId)
     {
         $cartItem = Cart_item::findOrFail($itemId);
         $cartItem->delete();
 
         return response()->json(['message' => "Item removed from cart"]);
+    }
+
+    public function clearCart(Request $request)
+    {
+        $userId    = Auth::id();
+        $sessionId = $request->session()->getId();
+
+        if ($userId) {
+            $cart = Cart::where('user_id', $userId)->first();
+        } else {
+            $cart = Cart::where('session_id', $sessionId)->first();
+        }
+
+        if ($cart) {
+            Cart_item::where('cart_id', $cart->id)->delete();
+        }
+
+        return response()->json(['message' => "Cart cleared"]);
+    }
+
+    public function mergeCart(Request $request)
+    {
+        $userId    = Auth::id();
+        $sessionId = $request->session()->getId();
+
+        if (!$userId) {
+            return response()->json(['message' => 'User not logged in'], 401);
+        }
+
+        $guestCart = Cart::Where('session_id', $sessionId)->with('cartItems')->first();
+
+        $userCart = Cart::firstOrCreate(['user_id' => $userId]);
+
+        if ($guestCart) {
+            foreach ($guestCart->cartItems as $guestItem) {
+                $existingItem = Cart_item::where('cart_id', $userCart->id)
+                    ->where('product_id', $guestItem->product_id)
+                    ->first();
+
+                if ($existingItem) {
+                    $existingItem->quantity += $guestItem->quantity;
+                    $existingItem->save();
+                } else {
+                    Cart_item::create([
+                        'cart_id' => $userCart->id,
+                        'product_id' => $guestItem->product_id,
+                        'quantity' => $guestItem->quantity
+                    ]);
+                }
+            }
+
+            $guestCart->cartItems()->delete();
+            $guestCart->delete();
+        }
+
+        return response()->json(['message' => 'Guest cart merged successfully']);
     }
 }

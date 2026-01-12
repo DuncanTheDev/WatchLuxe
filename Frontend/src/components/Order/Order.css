@@ -1,0 +1,44 @@
+.order-container {
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  margin-top: 50px;
+  width: 60%;
+}
+
+.order-item {
+  display: flex;
+  justify-content: space-between;
+  margin: 30px 0px 30px 0px;
+  gap: 50px;
+  padding-bottom: 30px;
+  border-bottom: 2px solid lightgray;
+}
+.order-img {
+  width: 80px;
+}
+
+.order-details {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  gap: 2px;
+}
+
+.order-id {
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.order-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  height: 30px;
+  width: 120px;
+  border-radius: 12px;
+  background-color: rgb(209, 247, 209);
+  color: green;
+  font-weight: bold;
+}

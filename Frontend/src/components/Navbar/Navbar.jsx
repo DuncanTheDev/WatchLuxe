@@ -1,15 +1,53 @@
 import "../Navbar/Navbar.css";
 import assets from "../../assets/assets";
-import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useCart } from "../../context/CartContext";
 
 export default function Navbar() {
   const [openMenu, setOpenMenu] = useState(false);
-  const [accountOpen, setAccountOpen] = useState(false); // dropdown toggle
+  const { cartCount, fetchCartCount, setCartCount } = useCart();
+  const navigate = useNavigate();
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsLoggedIn(!!token);
+  }, []);
+
+  const handleSignin = () => {
+    navigate("/signin");
+  };
+
+  const handleLogout = async () => {
+    localStorage.removeItem("token");
+    setIsLoggedIn(false);
+
+    try {
+      await fetchCartCount();
+    } catch (err) {
+      console.error("Failed to fetch guest cart: ", error);
+      setCartCount(0);
+    }
+
+    setTimeout(() => {
+      navigate("/");
+    }, 2000);
+  };
+
+  const handleMyAccount = () => {
+    navigate("/my-account");
+  };
+
+  const handleOrderHistory = () => {
+    navigate("/orders");
+  };
 
   return (
     <div className="navbar">
-      <h1 className="logo">WatchLuxe</h1>
+      <h1 className="logo" onClick={() => navigate("/")}>WatchLuxe</h1>
 
       {/* Menu List */}
       <ul className={`menu-list ${openMenu ? "open" : ""}`}>
@@ -67,23 +105,29 @@ export default function Navbar() {
         <div className="cart-icon">
           <NavLink to="/cart">
             <img className="icon" src={assets.cart} alt="cart_icon" />
-            <div className="dot"></div>
+            {cartCount > 0 && <div className="dot">{cartCount}</div>}
           </NavLink>
         </div>
 
-        {/* Account Icon with Dropdown */}
-        <div className="account-wrapper">
-          <img
-            className="icon"
-            src={assets.account}
-            alt="account_icon"
-            onClick={() => setAccountOpen(!accountOpen)}
-          />
-          {accountOpen && (
-            <div className="account-dropdown">
-              <a href="/signin">Sign In</a>
-              <a href="/signup">Sign Up</a>
-            </div>
+        {/* Account Dropdown */}
+        <div
+          className="account-wrapper"
+          onMouseEnter={() => setShowDropdown(true)}
+          onMouseLeave={() => setShowDropdown(false)}
+        >
+          {isLoggedIn ? (
+            <>
+              <p className="account-text">Account</p>
+              {showDropdown && (
+                <div className="account-dropdown">
+                  <p onClick={handleMyAccount}>My Account</p>
+                  <p onClick={handleOrderHistory}>Order History</p>
+                  <p onClick={handleLogout}>Logout</p>
+                </div>
+              )}
+            </>
+          ) : (
+            <p onClick={handleSignin}>Sign In</p>
           )}
         </div>
 

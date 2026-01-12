@@ -8,14 +8,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Cart extends Model
 {
     protected $fillable = [
-        'user_id'
+        'user_id',
+        'session_id',
     ];
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function cartItem(){
+    public function cartItems()
+    {
         return $this->hasMany(Cart_item::class);
     }
 }
