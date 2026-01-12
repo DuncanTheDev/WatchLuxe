@@ -118,7 +118,7 @@ class CartController extends Controller
         if ($guestCart) {
             foreach ($guestCart->cartItems as $guestItem) {
                 $existingItem = Cart_item::where('cart_id', $userCart->id)
-                    ->where('product_id', $guestCart->product_id)
+                    ->where('product_id', $guestItem->product_id)
                     ->first();
 
                 if ($existingItem) {
@@ -137,6 +137,6 @@ class CartController extends Controller
             $guestCart->delete();
         }
 
-        return response()->json(['message', 'Guest cart merged successfully']);
+        return response()->json(['message' => 'Guest cart merged successfully']);
     }
 }
